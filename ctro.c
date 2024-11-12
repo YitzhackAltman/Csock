@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
 #include <assert.h>
 
@@ -13,8 +12,9 @@
     #pragma comment(lib, "ws2_32.lib") 
     #include <winsock2.h>
 #else
+    #include <unistd.h>
     #include <sys/socket.h>
-    #include <arpa/inet.h>
+    #include <arpa/inet.h> // clinet
 #endif 
 
 typedef enum {
@@ -82,11 +82,11 @@ int main(void) {
   return 0;
 }
 
-#if 0 
+ 
 
 int main2(void) {
 
-  int socket = -1;
+  int s = -1;
   struct sockaddr_in server;
   int recv_size = 0;
 
@@ -104,7 +104,7 @@ int main2(void) {
   }
 
   memset(&server, 0, sizeof(server));
-  server.sin_addr.s_addr = inet_addr("172.217.160.238");
+  server.sin_addr.s_addr = inet_addr("ip");
   server.sin_family = AF_INET;
   server.sin_port = htons(80);
 
@@ -113,7 +113,7 @@ int main2(void) {
      exit(1);
   }
 
-  strcpy(message, "GET / HTTP/1.1\r\n\r\n");
+
   if(send(s, message, strlen(message), 0) < 0) {
      printf("[ERROR]: Could not send http request to server: %s\n", strerror(errno));
      exit(1);
@@ -140,5 +140,3 @@ int main2(void) {
     
   return 0;
 }
-
-#endif
