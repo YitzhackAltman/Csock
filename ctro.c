@@ -71,20 +71,9 @@ void http_request_start(HTTP* http, HTTP_Method method, const char *message) {
   if (message) {
     http_write(http, message);
   }
-} 
-
-int main(void) {
-  HTTP http = {0};
-  http_request_start(&http, HTTP_GET, NULL);
-  http_append_header(&http, "Host", "google.com");
-  printf("%s\n", http.message);
-  
-  return 0;
 }
 
- 
-
-int main2(void) {
+int main(void) {
 
   int s = -1;
   struct sockaddr_in server;
@@ -113,8 +102,12 @@ int main2(void) {
      exit(1);
   }
 
-
-  if(send(s, message, strlen(message), 0) < 0) {
+  HTTP http = {0};
+  http_request_start(&http, HTTP_GET, NULL);
+  http_append_header(&http, "Host", "google.com");
+  printf("%s\n", http.message);
+  
+  if(send(s, http.message, http.message_size, 0) < 0) {
      printf("[ERROR]: Could not send http request to server: %s\n", strerror(errno));
      exit(1);
   }
